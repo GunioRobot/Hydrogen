@@ -19,12 +19,12 @@ class DatabaseEngineFactory {
 	 * @var array
 	 */
 	protected static $engine = array();
-	
+
 	/**
 	 * This object should not be instantiated.
 	 */
 	private function __construct() {}
-	
+
 	/**
 	 * Creates a DatabaseEngine with the specified connection parameters.  If a DatabaseEngine
 	 * was created using the exact same parameters provided any time earlier in this page request,
@@ -56,22 +56,22 @@ class DatabaseEngineFactory {
 			$engineClass = &$engineName;
 		else
 			$engineClass = '\hydrogen\database\engines\\' . $engineName . 'Engine';
-			
+
 		$key = $host . ':' . $port . ':' . $socket . ':' . $database . ':' . $username .
 			':' . $engineClass  . ':' . $tablePrefix;
-		
+
 		if (!isset(static::$engine[$key])) {
 			static::$engine[$key] = new $engineClass($host, $port, $socket, $database,
 				$username, $password, $tablePrefix);
 		}
 		return static::$engine[$key];
 	}
-	
+
 	/**
 	 * Creates a new instance of DatabaseEngine if the specified connection is new, or returns
 	 * the stored engine for a connection that an engine's already been instantiated for.  The
 	 * DatabaseEngine is connected as soon as it is created.
-	 * 
+	 *
 	 * If no dbConfigName is specified, the database configuration from the
 	 * {@link \hydrogen\config\Config} object is used.  If there are multiple database configurations
 	 * in the Config object, the first one defined will be used here.
@@ -82,7 +82,7 @@ class DatabaseEngineFactory {
 	 * [database]
 	 * host[primary] = localhost
 	 * port[primary] = 3306
-	 * socket[primary] = 
+	 * socket[primary] =
 	 * database[primary] = myDB
 	 * username[primary] = myDBUser
 	 * password[primary] = myDBPass
@@ -90,7 +90,7 @@ class DatabaseEngineFactory {
 	 *
 	 * host[backup] = backup.mydomain.com
 	 * port[backup] = 3306
-	 * socket[backup] = 
+	 * socket[backup] =
 	 * database[backup] = backupDB
 	 * username[backup] = myDBUser
 	 * password[backup] = myDBPass
@@ -116,7 +116,7 @@ class DatabaseEngineFactory {
 				$dbConfigName = $engines[0];
 			}
 		}
-			
+
 		return static::getCustomEngine(
 			Config::getRequiredVal('database', 'engine', $dbConfigName),
 			Config::getVal('database', 'host', $dbConfigName),

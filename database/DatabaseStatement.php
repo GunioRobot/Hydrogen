@@ -14,7 +14,7 @@ namespace hydrogen\database;
  * @link http://www.php.net/manual/en/class.pdostatement.php
  */
 abstract class DatabaseStatement {
-	
+
 	/**
 	 * Binds a given variable to the specified SELECT'ed column name or number.  The variable,
 	 * then, will be updated every time {@link #fetchBound} is called with the fetched row's
@@ -39,7 +39,7 @@ abstract class DatabaseStatement {
 	 * @return <code>true</code> if successful; <code>false</code> otherwise.
 	 */
 	abstract public function bindColumn($column, &$param);
-	
+
 	/**
 	 * Binds a variable to a query parameter (by name or number) before
 	 * an execution.
@@ -47,101 +47,101 @@ abstract class DatabaseStatement {
 	 * @link http://www.php.net/manual/en/pdostatement.bindparam.php
 	 */
 	abstract public function bindParam($param, &$variable);
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.bindvalue.php
 	 */
 	abstract public function bindValue($param, $value);
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.closecursor.php
 	 */
 	abstract public function closeCursor();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.columncount.php
 	 */
 	abstract public function columnCount();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.errorcode.php
 	 */
 	abstract public function errorCode();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.errorinfo.php
 	 */
 	abstract public function errorInfo();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.execute.php
 	 */
 	abstract public function execute($inputParameters=array());
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.fetchall.php
 	 */
 	abstract public function fetchAll();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.fetchassoc.php
 	 */
 	abstract public function fetchAssoc();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.fetchbound.php
 	 */
 	abstract public function fetchBound();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.fetchobject.php
 	 */
 	abstract public function fetchObject();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.nextrowset.php
 	 */
 	abstract public function nextRowset();
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @link http://www.php.net/manual/en/pdostatement.rowcount.php
 	 */
 	abstract public function rowCount();
-	
-	
+
+
 	/**
 	 * Alias of {@link #fetchObject}.
 	 *
-	 * @see #fetchObject 
+	 * @see #fetchObject
 	 */
 	public function fetchObj() {
 		return $this->fetchObject();
 	}
-	
+
 	public function __destruct() {
 		$this->closeCursor();
 	}

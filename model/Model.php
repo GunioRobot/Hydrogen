@@ -30,13 +30,13 @@ use hydrogen\common\MagicCacheable;
  */
 abstract class Model extends MagicCacheable {
 	protected static $instances = array();
-	
+
 	/**
 	 * This class should not be instantiated from the outside.
 	 * Instead, call {@link #getInstance}.
 	 */
 	protected function __construct() { }
-	
+
 	/**
 	 * Returns an instance of this Model singleton.  If no instance of this
 	 * Model has been created, one will be created and returned.  Otherwise,
@@ -50,5 +50,5 @@ abstract class Model extends MagicCacheable {
 			static::$instances[$class] = new $class();
 		return static::$instances[$class];
 	}
-	
+
 }

@@ -13,7 +13,7 @@ namespace hydrogen\cache;
  * by name from the config file without any other changes.
  */
 interface CacheEngine {
-	
+
 	/**
 	 * Adds a new key/value pair to the cache, only if the key does not currently exist.
 	 *
@@ -23,7 +23,7 @@ interface CacheEngine {
 	 * @return boolean <code>true</code> if the key was successfully created; <code>false</code> otherwise.
 	 */
 	public function add($key, $value, $ttl);
-	
+
 	/**
 	 * Replaces an existing key/value pair in the cache.
 	 *
@@ -33,7 +33,7 @@ interface CacheEngine {
 	 * @return boolean <code>true</code> if the key was successfully replaced; <code>false</code> otherwise.
 	 */
 	public function replace($key, $value, $ttl);
-	
+
 	/**
 	 * Gets the value of the specified key.
 	 *
@@ -42,7 +42,7 @@ interface CacheEngine {
 	 * 		is returned.
 	 */
 	public function get($key);
-	
+
 	/**
 	 * Sets the value of the specified key, regardless of whether or not it already exists.
 	 *
@@ -52,7 +52,7 @@ interface CacheEngine {
 	 * @return boolean <code>true</code> if the key was successfully replaced; <code>false</code> otherwise.
 	 */
 	public function set($key, $value, $ttl);
-	
+
 	/**
 	 * Increments the value of a stored integer.
 	 *
@@ -62,7 +62,7 @@ interface CacheEngine {
 	 * 		an integer, or could not be incremented for any reason.
 	 */
 	public function increment($key, $value=1);
-	
+
 	/**
 	 * Decrements the value of a stored integer.
 	 *
@@ -72,7 +72,7 @@ interface CacheEngine {
 	 * 		an integer, or could not be decremented for any reason.
 	 */
 	public function decrement($key, $value=1);
-	
+
 	/**
 	 * Immediately removes the specified key and its value from the cache.
 	 *
@@ -80,20 +80,20 @@ interface CacheEngine {
 	 * @return boolean <code>true</code> if the key was successfully deleted; <code>false</code> otherwise.
 	 */
 	public function delete($key);
-	
+
 	/**
 	 * Flushes the cache entirely, removing every stored key/value pair.
 	 *
 	 * @return boolean <code>true</code> if the cache was successfully cleared; <code>false</code> otherwise.
 	 */
 	public function deleteAll();
-	
+
 	/**
 	 * Retrieves an associative array of pertinent statistics for the cache engine in use.  Note that
 	 * the statistics returned is dependent entirely on the engine, and follows no standard other than
 	 * being in the format of an associative array.
 	 *
-	 * @return array An associative array of statistics specific to the cache engine. 
+	 * @return array An associative array of statistics specific to the cache engine.
 	 */
 	public function getStats();
 }

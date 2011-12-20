@@ -16,12 +16,12 @@ use hydrogen\config\Config;
  */
 class LoaderFactory {
 	protected static $loaders = array();
-	
+
 	/**
 	 * LoaderFactory should never be instantiated.
 	 */
 	protected function __construct() {}
-	
+
 	/**
 	 * Gets an instance (newly created or old) of a Loader.
 	 *

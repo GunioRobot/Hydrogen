@@ -8,7 +8,7 @@ namespace hydrogen\recache;
 
 class AssetWrapper {
 	public $time, $expire, $groups, $data;
-	
+
 	function __construct($data, $expire=false, $groups=false) {
 		$this->time = round(microtime(true), 4);
 		if ($expire === 0)

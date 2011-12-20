@@ -7,7 +7,7 @@
 namespace hydrogen\view\exceptions;
 
 class ViewCacheException extends \Exception {
-	
+
 }
 
 ?>

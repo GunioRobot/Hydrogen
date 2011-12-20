@@ -18,11 +18,11 @@ use hydrogen\view\exceptions\NoSuchViewException;
  * functions through the $this variable.
  */
 class ViewSandbox {
-	
+
 	protected $context;
 	protected $cleanAppURL;
 	protected $cleanViewURL;
-	
+
 	/**
 	 * Creates a new ViewSandbox and calculates the necessary URLs.
 	 *
@@ -36,13 +36,13 @@ class ViewSandbox {
 			$this->cleanAppURL = substr($this->cleanAppURL, 0, -1);
 		$this->cleanViewURL = Config::getVal("view", "root_url");
 		if ($this->cleanViewURL === null) {
-			$this->cleanViewURL = $this->appURL(Config::getRequiredVal("view", 
+			$this->cleanViewURL = $this->appURL(Config::getRequiredVal("view",
 				"url_path"));
 		}
 		if ($this->cleanViewURL[strlen($this->cleanViewURL) - 1] == '/')
 			$this->cleanViewURL = substr($this->cleanViewURL, 0, -1);
 	}
-	
+
 	/**
 	 * Returns request-scope variables as they are called upon.
 	 *
@@ -61,7 +61,7 @@ class ViewSandbox {
 		}
 		return $val;
 	}
-	
+
 	/**
 	 * Sets or creates a new request-scope variable.
 	 *
@@ -74,7 +74,7 @@ class ViewSandbox {
 	public function __set($varName, $value) {
 		$this->context->set($varName, $value);
 	}
-	
+
 	/**
 	 * Checks to see whether a specified request-scope variable exists.
 	 *
@@ -86,7 +86,7 @@ class ViewSandbox {
 	public function __isset($varName) {
 		return $this->context->keyExists($varName);
 	}
-	
+
 	/**
 	 * Unsets (deletes) the specified request-scope variable.
 	 *
@@ -97,7 +97,7 @@ class ViewSandbox {
 	public function __unset($varName) {
 		$this->context->delete($varName);
 	}
-	
+
 	/**
 	 * Loads the specified view within this sandbox, making the current
 	 * context available to it.
@@ -107,7 +107,7 @@ class ViewSandbox {
 	public function loadView($viewName) {
 		View::loadIntoSandbox($viewName, $this);
 	}
-	
+
 	/**
 	 * Generates a URL relative to the base URL of this web application.
 	 * Calling this function with no arguments returns the base URL set in
@@ -129,7 +129,7 @@ class ViewSandbox {
 		}
 		return $this->cleanAppURL;
 	}
-	
+
 	/**
 	 * Generates a URL relative to the root view URL of this web application.
 	 * Calling this function with no arguments returns the root view URL for
@@ -150,7 +150,7 @@ class ViewSandbox {
 		}
 		return $this->cleanViewURL;
 	}
-	
+
 	/**
 	 * Executes the supplied PHP file inside the sandbox, making the variable
 	 * $context (the ContextStack for this sandbox) available to it.  Note
@@ -167,7 +167,7 @@ class ViewSandbox {
 				$filePath);
 		}
 	}
-	
+
 	/**
 	 * Executes the supplied PHP code inside the sandbox, making the variable
 	 * $context (the ContextStack for this sandbox) available to it.  Note

@@ -12,23 +12,23 @@ use hydrogen\config\Config;
 use hydrogen\common\exceptions\InvalidPathException;
 
 class TextFileEngine implements LogEngine {
-	
+
 	protected $logfile, $fp;
-	
+
 	public function __construct() {
 		$logdir = Config::getVal('log', 'logdir');
 		$prefix = Config::getVal('log', 'fileprefix', false) ?: 'log';
 		$filename = $prefix . date('ymd') . '.log';
-			
+
 		// Get our path relative to the config file
 		$logdir = Config::getAbsolutePath($logdir);
-		
+
 		// Add the trailing slash if necessary
 		if ($logdir[strlen($logdir) - 1] != DIRECTORY_SEPARATOR)
 			$logdir .= DIRECTORY_SEPARATOR;
 		$this->logfile = $logdir . $filename;
 	}
-	
+
 	public function write($loglevel, $file, $line, $msg) {
 		switch ($loglevel) {
 			case Log::LOGLEVEL_ERROR:
@@ -64,7 +64,7 @@ class TextFileEngine implements LogEngine {
 		else
 			throw new InvalidPathException("Could not write to " . $this->logfile);
 	}
-	
+
 	public function __destruct() {
 		if (isset($this->fp))
 			@fclose($this->fp);

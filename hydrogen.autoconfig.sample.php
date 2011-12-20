@@ -59,7 +59,7 @@ Config::addConfig(
 	true // Check for config file changes before using cached version?
 	);
 
-	
+
 /*#  The rest of this file can be used to override user-specified config
  *#  settings or to set new config items that shouldn't be presented to the
  *#  user.  What follows are the values Hydrogen needs from the programmer
@@ -139,7 +139,7 @@ Config::setVal("view", "url_path", "themes/default");
  ***  print it out like this: {?varname?}  in the page output?  If false,
  ***  an exception will be thrown instead.  Leave this on for development, but
  ***  the default is false.
- ***/	
+ ***/
 Config::setVal("view", "print_missing_var", true);
 
 
@@ -151,7 +151,7 @@ Config::setVal("view", "print_missing_var", true);
  ***  used inside a Hydrogen template file.  Set to 'true' to allow templates
  ***  to contain raw PHP.  This is not recommended in environments where
  ***  third parties can submit template code.
- ***/	
+ ***/
 //Config::setVal("view", "allow_php", true);
 
 

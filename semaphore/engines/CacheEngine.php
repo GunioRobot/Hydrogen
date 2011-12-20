@@ -11,12 +11,12 @@ use hydrogen\cache\CacheEngineFactory;
 
 class CacheEngine extends SemaphoreEngine {
 	protected $engine;
-	
+
 	public function __construct() {
 		parent::__construct();
 		$this->engine = CacheEngineFactory::getEngine();
 	}
-	
+
 	public function acquire($sem_name, $wait_time=2) {
 		if (isset($this->acquired_sems[$sem_name]) && $this->acquired_sems[$sem_name])
 			return true;
@@ -33,7 +33,7 @@ class CacheEngine extends SemaphoreEngine {
 		}
 		return $this->acquired_sems[$sem_name];
 	}
-	
+
 	public function release($sem_name) {
 		if (!isset($this->acquired_sems[$sem_name]) ||
 				(isset($this->acquired_sems[$sem_name]) && !$this->acquired_sems[$sem_name]))

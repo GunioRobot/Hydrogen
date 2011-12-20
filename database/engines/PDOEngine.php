@@ -15,7 +15,7 @@ use hydrogen\database\exceptions\InvalidSQLException;
 
 abstract class PDOEngine extends DatabaseEngine {
 	protected $pdo;
-	
+
 	protected function setPDOConnection($host, $port, $socket, $database, $username, $password, $dsn, $driverOptions=false) {
 		try {
 			if (isset($driverOptions) && $driverOptions)
@@ -31,23 +31,23 @@ abstract class PDOEngine extends DatabaseEngine {
 			throw new DatabaseConnectionException($e->getMessage());
 		}
 	}
-	
+
 	public function beginTransaction() {
 		return $this->pdo->beginTransaction();
 	}
-	
+
 	public function commit() {
 		return $this->pdo->commit();
 	}
-	
+
 	public function errorCode() {
 		return $this->pdo->errorCode();
 	}
-	
+
 	public function errorInfo() {
 		return $this->pdo->errorInfo();
 	}
-	
+
 	public function exec($statement) {
 		try {
 			return $this->pdo->exec($statement);
@@ -56,11 +56,11 @@ abstract class PDOEngine extends DatabaseEngine {
 			throw new InvalidSQLException("Invalid SQL. Statement could not be executed.");
 		}
 	}
-	
+
 	public function lastInsertId($name=NULL) {
 		return $this->pdo->lastInsertId($name);
 	}
-	
+
 	public function prepare($statement) {
 		try {
 			return new PDOStatement($this->pdo->prepare($statement));
@@ -69,7 +69,7 @@ abstract class PDOEngine extends DatabaseEngine {
 			throw new InvalidSQLException("Invalid SQL. Statement could not be prepared.");
 		}
 	}
-	
+
 	public function query($statement) {
 		try {
 			return new PDOStatement($this->pdo->query($statement));
@@ -78,11 +78,11 @@ abstract class PDOEngine extends DatabaseEngine {
 			throw new InvalidSQLException("Invalid SQL. Query could not be executed.");
 		}
 	}
-	
+
 	public function quote($string) {
 		return $this->pdo->quote($string);
 	}
-	
+
 	public function rollBack() {
 		return $this->rollBack();
 	}

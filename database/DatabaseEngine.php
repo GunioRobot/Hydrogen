@@ -25,7 +25,7 @@ abstract class DatabaseEngine {
 	 */
 	const QUERY_FORMATTER = '\hydrogen\database\formatters\StandardSQLFormatter';
 	protected $reconstruct;
-	
+
 	/**
 	 * Opens a transaction session with the database.  Once this is called, no database-altering
 	 * queries should actually take place until {@link #commit} is called.  The same queries
@@ -35,7 +35,7 @@ abstract class DatabaseEngine {
 	 * @return boolean <code>true</code> if successful; <code>false</code> otherwise.
 	 */
 	abstract public function beginTransaction();
-	
+
 	/**
 	 * Commits all queries that were stored since {@link #beginTransaction} was called.
 	 *
@@ -43,23 +43,23 @@ abstract class DatabaseEngine {
 	 * @return boolean <code>true</code> if successful; <code>false</code> otherwise.
 	 */
 	abstract public function commit();
-	
+
 	/**
 	 * Retrieves a PDO-similar error code for the last query made with the engine object
 	 * (but not from a {@link DatabaseStatement} interaction).  While this number is
 	 * wholly dependent on the specific DatabaseEngine being used, it should follow PDO's
 	 * SQLSTATE as closely as possible and always return 0 or some form of 0 when there has
 	 * been no error.
-	 * 
+	 *
 	 * @link http://www.php.net/manual/en/pdo.errorcode.php
 	 * @return mixed The error code if there was an error; 0 if no error; <code>null</code>
 	 * 		if no query has been executed directly from the engine.
 	 */
 	abstract public function errorCode();
-	
+
 	/**
 	 * Retrieves an array with deeper info about the last error.  The structure of the array is:
-	 * 
+	 *
 	 * <code>[0] => SQLSTATE-similar error code available by caling {@link #errorCode}.
 	 * [1] => Error code specific to the driver or engine being used.
 	 * [2] => Human-readable error message specific to the driver or engine being used.</code>
@@ -70,7 +70,7 @@ abstract class DatabaseEngine {
 	 * 		elements 1 and 2 of the array will be NULL.
 	 */
 	abstract public function errorInfo();
-	
+
 	/**
 	 * Executes the provided SQL statement and returns the number of affected rows.  This
 	 * method cannot be used to get the results of a SELECT statement.
@@ -80,10 +80,10 @@ abstract class DatabaseEngine {
 	 * @return int The number of rows affected by the query.
 	 */
 	abstract public function exec($statement);
-	
+
 	/**
 	 * Gets the ID of the last row inserted into the database during this connection.
-	 * 
+	 *
 	 * Note that not all DatabaseEngines use drivers that handle this function properly.
 	 * As such, this function should only be used in the case where the programmer can be
 	 * assured which DatabaseEngine will be used, and that it will not utilize a persistent
@@ -95,26 +95,26 @@ abstract class DatabaseEngine {
 	 * @return mixed The ID of the last inserted row during this database connection.
 	 */
 	abstract public function lastInsertId($name=false);
-	
+
 	/**
 	 * Prepares an SQL query for execution with {@link DatabaseStatement#execute}.
-	 * 
+	 *
 	 * DatabaseEngines use the same prepared query format as many other popular database
 	 * modules, including PDO.  Unlike traditional (and dated) query methods, prepared
 	 * queries are immune to SQL injection if used properly.
-	 * 
+	 *
 	 * Any dynamic element in an SQL query should be replaced with a question mark (?) or
 	 * a variable name preceded by a colon (:varname) -- but only one type of replacement
 	 * within the same query.  Note, however, that only variable values can be replaced.
 	 * For example, the following are legal, preparable queries:
-	 * 
+	 *
 	 * <code>SELECT customer FROM orders WHERE total > ? AND product = ?
 	 * INSERT INTO orders (customer, product, total) VALUES (:cust, :prod, :total)</code>
-	 * 
+	 *
 	 * These queries, however, are not legal and cannot be prepared:
 	 * <code>SELECT customer FROM orders WHERE total > ? AND product = :prod
 	 * SELECT ? FROM orders LIMIT 1</code>
-	 * 
+	 *
 	 * The exception to this rule is if a query is prepared using a {@link Query}
 	 * object, which supports both replacement types simultaneously.
 	 *
@@ -128,7 +128,7 @@ abstract class DatabaseEngine {
 	 * @return DatabaseStatement A prepared, ready-for-execution DatabaseStatement.
 	 */
 	abstract public function prepare($statement);
-	
+
 	/**
 	 * Executes a valid SQL query and returns the results in a {@link DatabaseStatement}.
 	 *
@@ -138,7 +138,7 @@ abstract class DatabaseEngine {
 	 * @return DatabaseStatement An executed statement with results ready to read.
 	 */
 	abstract public function query($statement);
-	
+
 	/**
 	 * Properly quotes a string for use in an SQL query.  Like <code>addslashes()</code>, but
 	 * should use the quoting available in the database driver.  If such a method is not available,
@@ -152,7 +152,7 @@ abstract class DatabaseEngine {
 	 * @return string An SQL-safe string.
 	 */
 	abstract public function quote($string);
-	
+
 	/**
 	 * Rolls back all queries that were stored since {@link #beginTransaction} was called.
 	 *
@@ -160,7 +160,7 @@ abstract class DatabaseEngine {
 	 * @return boolean <code>true</code> if successful; <code>false</code> otherwise.
 	 */
 	abstract public function rollBack();
-	
+
 	/**
 	 * Immediately sets the engine's database connection to the one specified, disconnecting the current
 	 * connection if necessary.  This should only be called in rare cases.  All new connections should
@@ -181,7 +181,7 @@ abstract class DatabaseEngine {
 	 * 		be made.
 	 */
 	abstract protected function setConnection($host, $port, $socket, $database, $username, $password, $tablePrefix);
-	
+
 	/**
 	 * Gets an array of information needed to reconstruct this DatabaseEngine.  This is the same array
 	 * used to restore the DatabaseEngine after being serialized/unserialized.
@@ -195,7 +195,7 @@ abstract class DatabaseEngine {
 	public function getReconstructArray() {
 		return $this->reconstruct;
 	}
-	
+
 	/**
 	 * Gets the table prefix that this engine was initialized with.  The prefix itself does
 	 * not affect the function of the DatabaseEngine, but is stored as a convenience for any
@@ -207,11 +207,11 @@ abstract class DatabaseEngine {
 	public function getTablePrefix() {
 		return $this->reconstruct['table_prefix'] ?: '';
 	}
-	
+
 	/**
 	 * Creates a new instance of this DatabaseEngine.  This should never be called directly;
 	 * rather, new database engine instances should be requested by calling
-	 * {@link DatabaseEngineFactory#getEngine} OR . {@link DatabaseEngineFactory#getEngineByName} 
+	 * {@link DatabaseEngineFactory#getEngine} OR . {@link DatabaseEngineFactory#getEngineByName}
 	 * The DatabaseEngine is connected when created.
 	 *
 	 * @param string|boolean host Hostname to connect to, or <code>false</code> to use a UNIX socket.
@@ -241,11 +241,11 @@ abstract class DatabaseEngine {
 			);
 		$this->setConnection($host, $port, $socket, $database, $username, $password, $tablePrefix);
 	}
-	
+
 	public function __sleep() {
 		return array('reconstruct');
 	}
-	
+
 	public function __wakeup() {
 		$this->setConnection(
 			$this->reconstruct['host'],

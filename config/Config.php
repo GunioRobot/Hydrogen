@@ -19,12 +19,12 @@ use hydrogen\semaphore\SemaphoreEngineFactory;
  * The Config class offers a project-wide app configuration solution.  It can be
  * used standalone to store and retrieve values during the lifetime of the
  * request, or read in a configuration file in various formats.
- * 
+ *
  * While the Config object is intended to hold the configuration necessary for
  * the Hydrogen packages to function, it can be used to manage the configuration
  * for any aspect of the project, all within the same configuration file if
  * desired.
- * 
+ *
  * Sample configuration files can be found in in the hydrogen/config/sample
  * folder.  Available options are as follows:
  * <ul>
@@ -36,7 +36,7 @@ use hydrogen\semaphore\SemaphoreEngineFactory;
  * <li> A pure PHP file that sets configuration options through an array
  * 		or a series of calls to {@link #setVal} (see config_sample.php).
  * </ul>
- * 
+ *
  * Note that the INI and PHP-INI formats are parsed with PHP's built-in native
  * parser, and has all its inherent capabilities.  Additionally, it is far
  * faster than manual parsing.  To dissuade any fears about processing speed,
@@ -45,7 +45,7 @@ use hydrogen\semaphore\SemaphoreEngineFactory;
  * with a single method call.  More importantly, as a pure qualified PHP file,
  * PHP opcode cachers will cache the entire file and load it from memory when
  * it's requested.
- * 
+ *
  * If the compareDates paramater of {@link #loadConfig} is set to
  * <code>false</code>, Config effectively generates no stat calls in order to
  * load its config options.  For every connection, then, the hard drive is not
@@ -56,14 +56,14 @@ class Config {
 	protected static $values = array();
 	protected static $basePath = false;
 	protected static $cachePath = false;
-	
+
 	/**
 	 * Sets the base path of this webapp.  This configuration value is not
 	 * accessed or changed with the rest of the config options, because core
 	 * configuration functions depend on this value.
 	 *
 	 * This function should be called before any part of Hydrogen is interacted
-	 * with.  Normally, it is called as the very first instruction in 
+	 * with.  Normally, it is called as the very first instruction in
 	 * hydrogen.autoconfig.php.
 	 *
 	 * @param basePath string The absolute path to the root of this webapp.
@@ -72,14 +72,14 @@ class Config {
 	public static function setBasePath($basePath) {
 		if (static::isRelativePath($basePath))
 			throw new InvalidPathException("Base path must be absolute.");
-		
+
 		// Remove trailing slash(es)
 		while ($basePath{strlen($basePath) - 1} === DIRECTORY_SEPARATOR)
 			$basePath = substr($basePath, 0, strlen($basePath) - 1);
-		
+
 		static::$basePath = $basePath;
 	}
-	
+
 	/**
 	 * Sets the cache path of this webapp.  The folder specified should allow
 	 * the PHP-running user full read/write access to it and its contents.
@@ -99,14 +99,14 @@ class Config {
 	 */
 	public static function setCachePath($cachePath) {
 		$cachePath = static::getAbsolutePath($cachePath);
-		
+
 		// Remove trailing slash(es)
 		while ($cachePath{strlen($cachePath) - 1} === DIRECTORY_SEPARATOR)
 			$cachePath = substr($cachePath, 0, strlen($cachePath) - 1);
-			
+
 		static::$cachePath = $cachePath;
 	}
-	
+
 	/**
 	 * Gets the base path of this webapp, set by the {@link #setBasePath}
 	 * function.
@@ -117,7 +117,7 @@ class Config {
 	public static function getBasePath() {
 		return static::$basePath;
 	}
-	
+
 	/**
 	 * Gets the cache path of this webapp, set by the {@link #setCachePath}
 	 * function.
@@ -128,7 +128,7 @@ class Config {
 	public static function getCachePath() {
 		return static::$cachePath;
 	}
-	
+
 	/**
 	 * Retrieves a specified value from the currently loaded configuration.
 	 *
@@ -151,7 +151,7 @@ class Config {
 			return static::$values[$section][$key];
 		else if ($subkey && isset(static::$values[$section][$key][$subkey]))
 			return static::$values[$section][$key][$subkey];
-		
+
 		if ($exceptionOnError) {
 			$msg = "Config value not found: [$section][$key]";
 			if ($subkey === true)
@@ -173,7 +173,7 @@ class Config {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Retrieves a specified required value from the currently loaded
 	 * configuration.  This is equivalent to calling {@link #getVal} with a
@@ -190,7 +190,7 @@ class Config {
 	public static function getRequiredVal($section, $key, $subkey=false) {
 		return static::getVal($section, $key, $subkey, true);
 	}
-	
+
 	/**
 	 * Loads the specified config file with or without caching, and adds the
 	 * configuration values to the ones already loaded (if any).
@@ -223,7 +223,7 @@ class Config {
 		else
 			static::$values = array_merge($newConfig, static::$values);
 	}
-	
+
 	/**
 	 * Merges the supplied config value array with the one currently loaded
 	 * into the Config class (if any).
@@ -242,7 +242,7 @@ class Config {
 		else
 			static::$values = array_merge($configArray, static::$values);
 	}
-	
+
 	/**
 	 * Replaces all set config values (if any) with the contents of the config
 	 * file specified.  The specified file can be read directly or cached.
@@ -268,7 +268,7 @@ class Config {
 		static::$values = static::loadConfig($configFile, $cacheKey,
 			$compareDates);
 	}
-	
+
 	/**
 	 * Replaces all set config values (if any) with the contents of the of the
 	 * one supplied.
@@ -279,7 +279,7 @@ class Config {
 	public static function replaceConfigArray($configArray) {
 		static::$values = $configArray;
 	}
-	
+
 	/**
 	 * Loads the specified configuration file with or without caching, and
 	 * returns the parsed values as an associative array.  In order to use
@@ -320,7 +320,7 @@ class Config {
 		if (!is_string($configFile) || ($configFile = trim($configFile)) == "")
 			throw new ConfigFileNotDefinedException('Config file must be an actual legal file path.');
 		$configFile = static::getAbsolutePath($configFile);
-		
+
 		// Shall we attempt to load a cached version?
 		if ($cacheKey && static::$cachePath) {
 			$cacheValid = true;
@@ -344,7 +344,7 @@ class Config {
 					return $cachedConfig;
 			}
 		}
-		
+
 		// We're not loading the cached version -- load the original.
 		ob_start();
 		$loaded = @include($configFile);
@@ -361,7 +361,7 @@ class Config {
 		}
 		if (isset($configArray) && is_array($configArray))
 			$values = &$configArray;
-			
+
 		// The original config is loaded.  Should we cache it?
 		if ($cacheKey && static::$cachePath) {
 			if (!file_exists(static::$cachePath))
@@ -386,11 +386,11 @@ class Config {
 			}
 			@fclose($fp);
 		}
-		
+
 		// Return the loaded config
 		return $values;
 	}
-	
+
 	/**
 	 * Converts relative paths to absolute paths by treating the base path as
 	 * the starting point for relative paths.
@@ -454,7 +454,7 @@ class Config {
 		}
 		return $path;
 	}
-	
+
 	/**
 	 * Tests to see if the given path is relative.
 	 *
@@ -474,7 +474,7 @@ class Config {
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Exports the supplied array in executable PHP format, suitable for saving
 	 * in a .php file to be loaded later.  The saved file consists of a single
@@ -493,7 +493,7 @@ class Config {
 		$out .= ";\n?>";
 		return $out;
 	}
-	
+
 	/**
 	 * Exports any array as fully qualified PHP.
 	 *
@@ -521,7 +521,7 @@ class Config {
 		}
 		return substr($str, 0, -1) . "\n" . str_repeat("\t", $numTabs) . ")";
 	}
-	
+
 	/**
 	 * Sets a certain section/key pair to the given value.
 	 *
@@ -532,7 +532,7 @@ class Config {
 	public static function setVal($section, $key, $value) {
 		static::$values[$section][$key] = $value;
 	}
-	
+
 	/**
 	 * This class should never be instantiated.
 	 */

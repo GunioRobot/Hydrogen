@@ -45,20 +45,20 @@ class StandardSQLFormatter extends QueryFormatter {
 			)
 		);
 	protected $incVals = array(), $verb, $parsed;
-	
+
 	public function __construct($queryArray) {
 		reset($queryArray);
 		$this->verb = key($queryArray);
 		$this->parsed = $this->parseQueryArray($queryArray);
 	}
-	
+
 	public function getPreparedQuery() {
 		$str = '';
 		for ($i = 0; $i < count($this->parsed); $i += 2)
 			$str .= $this->parsed[$i] . '?';
 		return substr($str, 0, -1);
 	}
-	
+
 	public function getPreparedValues($valueArray=false) {
 		$vars = array();
 		$inc = 0;
@@ -77,7 +77,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return $vars;
 	}
-	
+
 	public function getCompleteQuery($valueArray=false) {
 		$str = '';
 		$vars = $this->getPreparedValues($valueArray);
@@ -93,7 +93,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return $str;
 	}
-	
+
 	protected function parseQueryArray(&$queryArray) {
 		$ops = static::$orderOfOperations[$this->verb];
 		$queryStr = '';
@@ -112,7 +112,7 @@ class StandardSQLFormatter extends QueryFormatter {
 			'/';
 		return preg_split($splitRegex, $queryStr, -1, PREG_SPLIT_DELIM_CAPTURE);
 	}
-	
+
 	protected function parseDELETE(&$clause) {
 		$str = 'DELETE';
 		if (isset($clause['modifiers']) && $clause['modifiers']) {
@@ -133,7 +133,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return $str;
 	}
-	
+
 	protected function parseFROM(&$clause) {
 		$str = 'FROM ';
 		foreach ($clause as $table) {
@@ -146,15 +146,15 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return substr($str, 0, -2);
 	}
-	
+
 	protected function parseGROUPBY(&$clause) {
 		return 'GROUP BY ' . $clause;
 	}
-	
+
 	protected function parseHAVING(&$clause) {
 		return 'HAVING ' . $this->parseExpressionTree($clause);
 	}
-	
+
 	protected function parseINSERT(&$clause) {
 		$str = 'INSERT';
 		if (isset($clause['modifiers']) && $clause['modifiers']) {
@@ -163,7 +163,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return $str;
 	}
-	
+
 	protected function parseINTO(&$clause) {
 		if (!isset($clause['table']))
 			throw new InvalidSQLException('No table specified for the INTO clause.');
@@ -176,7 +176,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return $str;
 	}
-	
+
 	protected function parseJOIN(&$clause) {
 		$str = '';
 		foreach ($clause as $join) {
@@ -203,7 +203,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return substr($str, 0, -1);
 	}
-	
+
 	protected function parseLIMIT(&$clause) {
 		$str = 'LIMIT ';
 		if (!isset($clause['rowcount']))
@@ -213,7 +213,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		$str .= $clause['rowcount'];
 		return $str;
 	}
-	
+
 	protected function parseORDERBY(&$clause) {
 		$str = 'ORDER BY ';
 		if (!is_array($clause) || count($clause) == 0)
@@ -228,7 +228,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return substr($str, 0, -2);
 	}
-	
+
 	protected function parseSELECT(&$clause) {
 		if (!isset($clause['SELECT'])) {
 			$str = 'SELECT ';
@@ -261,7 +261,7 @@ class StandardSQLFormatter extends QueryFormatter {
 			return $sub->getPreparedQuery();
 		}
 	}
-	
+
 	protected function parseSET(&$clause) {
 		$str = 'SET ';
 		if (!is_array($clause) || count($clause) == 0)
@@ -277,7 +277,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return substr($str, 0, -2);
 	}
-	
+
 	protected function parseVALUES(&$clause) {
 		$str = 'VALUES ';
 		if (!is_array($clause) || count($clause) == 0)
@@ -293,7 +293,7 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return substr($str, 0, -2);
 	}
-	
+
 	protected function parseUPDATE(&$clause) {
 		$str = 'UPDATE ';
 		if (isset($clause['modifiers']) && $clause['modifiers']) {
@@ -312,11 +312,11 @@ class StandardSQLFormatter extends QueryFormatter {
 		}
 		return substr($str, 0, -2);
 	}
-	
+
 	protected function parseWHERE(&$clause) {
 		return 'WHERE ' . $this->parseExpressionTree($clause);
 	}
-	
+
 	protected function parseExpressionTree(&$tree) {
 		$str = '';
 		$first = true;

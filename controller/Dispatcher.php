@@ -50,7 +50,7 @@ use hydrogen\controller\exceptions\MissingArgumentException;
  * and {@link #addControllerIncludes} commands.  The PHP file for a given
  * controller is included only when a rule with that controller is matched.
  *
- * If the Dispatcher fails to match the request to any of the rules, 
+ * If the Dispatcher fails to match the request to any of the rules,
  * Dispatcher::dispatch() returns false.  At this point, a 404 page can be
  * displayed manually if that's the desired effect.  Another option is to set a
  * "Match All" rule as the final rule, which sends any request that hasn't
@@ -73,10 +73,10 @@ class Dispatcher {
 	const RULE_URL_REGEX_MAP = 9;
 	const RULE_URL_REGEX_MATCH = 10;
 	const RULE_MATCH_ALL = 11;
-	
+
 	protected static $dispatchRules = array();
 	protected static $controllerPaths = array();
-	
+
 	/**
 	 * Initiates the process of analyzing the current request against the
 	 * registered set of rules.  Rules should be added to the dispatcher before
@@ -195,7 +195,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Associates a controller name with a path to a PHP file.  If a rule
 	 * matches during the {@link #dispatch} call, the matching controller's PHP
@@ -215,7 +215,7 @@ class Dispatcher {
 			$controllerName = '\\' . $controllerName;
 		static::$controllerPaths[$controllerName] = $phpPath;
 	}
-	
+
 	/**
 	 * Adds an array of controller classes and their PHP paths as key => value
 	 * pairs.  These paths function the same way as they do in the
@@ -229,7 +229,7 @@ class Dispatcher {
 	public static function addControllerIncludeArray($arrayMap) {
 		static::$controllerPaths = array_merge(static::$controllerPaths, $arrayMap);
 	}
-	
+
 	/**
 	 * Appends a rule of the specified type to the Dispatcher's rule list.
 	 * It's rarely appropriate to call this function directly -- instead, see
@@ -243,7 +243,7 @@ class Dispatcher {
 	public static function addRule($type, $argArray) {
 		static::$dispatchRules[] = array($type, $argArray);
 	}
-	
+
 	/**
 	 * Appends an array of multiple rule arrays to the Dispatcher's rule set.
 	 * It's rarely appropriate to call this function directly -- instead, see
@@ -255,7 +255,7 @@ class Dispatcher {
 	public static function addRules($ruleArray) {
 		static::$dispatchRules = array_merge(static::$dispatchRules, $ruleArray);
 	}
-	
+
 	/**
 	 * Matches when a PHP file has been called with either no PATH_INFO data,
 	 * or just a slash for the PATH_INFO.  This is the equivalent to calling
@@ -278,7 +278,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addHomeMatchRule}.
 	 *
@@ -292,7 +292,7 @@ class Dispatcher {
 	protected static function dispatchHomeMatch($cName, $fName) {
 		return static::dispatchPathInfoMatch('', $cName, $fName);
 	}
-		
+
 	/**
 	 * Matches in the case that a PATH_INFO exists with a controller name as
 	 * its first element and a function name as its second element, with all
@@ -326,7 +326,7 @@ class Dispatcher {
 	 * 		above two arguments, this rule will not match.  Otherwise, the
 	 * 		function will be called with no arguments.
 	 *
-	 * NOTE: Due to a limitation in PHP's error handling, whenever a warning is 
+	 * NOTE: Due to a limitation in PHP's error handling, whenever a warning is
 	 * encountered in the controller and/or view that this rule triggers, the
 	 * warning will be send as E_USER_WARNING rather than E_WARNING.  This is
 	 * the only rule that has this effect.
@@ -346,7 +346,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addPathInfoAutoMapRule}.
 	 *
@@ -375,7 +375,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Matches when a PATH_INFO is supplied with the specified elements mapping
 	 * to an existing Controller class and function.  This is similar to the
@@ -418,7 +418,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addPathInfoFolderMapRule}.
 	 *
@@ -448,7 +448,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Matches when the PATH_INFO matches the given perl-style regular
 	 * expression string.  As with all mapping rules, the controller name
@@ -499,7 +499,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addPathInfoRegexMapRule}.
 	 *
@@ -532,7 +532,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Matches when the PATH_INFO matches the given perl-style regular
 	 * expression string.  When the rule matches, the request will be sent
@@ -568,7 +568,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addPathInfoRegexMatchRule}.
 	 *
@@ -585,7 +585,7 @@ class Dispatcher {
 	 * @return boolean true if the request was dispatched successfully,
 	 * 		false otherwise.
 	 */
-	protected static function dispatchPathInfoRegexMatch($regex, $cName, 
+	protected static function dispatchPathInfoRegexMatch($regex, $cName,
 			$fName, $aIndex) {
 		$pathInfo = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
 		if (preg_match($regex, $pathInfo, $tokens) > 0) {
@@ -594,7 +594,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Matches when the PATH_INFO matches the string provided in $match
 	 * exactly.  If this rule matches, the request is dispatched to the
@@ -616,7 +616,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addPathInfoMatchRule}.
 	 *
@@ -635,7 +635,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Matches when the request's query string contains two predefined
 	 * variables that map to a controller and a function.  Additional variables
@@ -643,7 +643,7 @@ class Dispatcher {
 	 *
 	 * For example, assume this query string:
 	 * ?target=blog&action=read&post=43&type=full
-	 * 
+	 *
 	 * Setting cVar to "target" will cause Dispatcher to instantiate the Blog
 	 * controller.  Like all mapping rules, the controller name is
 	 * automatically capitalized.  Optionally, a namespace and a suffix can
@@ -681,7 +681,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addGetVarMapRule}.
 	 *
@@ -714,7 +714,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Matches when the provided GET variables match the provided values.
 	 * When the match is confirmed, the specified controller class is
@@ -757,7 +757,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addGetVarMatchRule}.
 	 *
@@ -783,7 +783,7 @@ class Dispatcher {
 		return static::passRequest($cName, $fName,
 			static::getArgsFromAssocArray($_GET, $aVar));
 	}
-	
+
 	/**
 	 * Matches when the provided GET variables match the provided perl-style
 	 * regular expressions.  When the match is confirmed, the specified
@@ -826,7 +826,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addGetVarRegexMatchRule}.
 	 *
@@ -852,7 +852,7 @@ class Dispatcher {
 		return static::passRequest($cName, $fName,
 			static::getArgsFromAssocArray($_GET, $aVar));
 	}
-	
+
 	/**
 	 * Matches when the supplied perl-style regular expression string matches
 	 * the request URL.  The regex string should have at least two
@@ -903,7 +903,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addUrlRegexMapRule}.
 	 *
@@ -934,7 +934,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Matches when the supplied perl-style regular expression string matches
 	 * the request URL.  On a match, the specified controller is instantiated
@@ -977,7 +977,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addUrlRegexMatchRule}.
 	 *
@@ -1002,7 +1002,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * This rule matches everything.  Whenever this rule is reached, it will
 	 * always match and trigger the specified controller and function.  The
@@ -1025,7 +1025,7 @@ class Dispatcher {
 				)
 			);
 	}
-	
+
 	/**
 	 * Dispatches a rule set by {@link #addMatchAllRule}.
 	 *
@@ -1039,7 +1039,7 @@ class Dispatcher {
 	protected static function dispatchMatchAll($cName, $fName) {
 		return static::passRequest($cName, $fName);
 	}
-	
+
 	/**
 	 * Dispatches any mapping rule that's been reduced to an array of tokens
 	 * and a set of index values.
@@ -1069,7 +1069,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Dispatches any matching rule that's been reduced to an array of tokens,
 	 * a controller class name, a function name, and a set of indices to be
@@ -1094,7 +1094,7 @@ class Dispatcher {
 		return static::passRequest($cName, $fName, $args);
 		return false;
 	}
-	
+
 	/**
 	 * Attempts to pass the current page request to a specified controller,
 	 * calling a function with a list of arguments.
@@ -1122,7 +1122,7 @@ class Dispatcher {
 	 * @return boolean true if the request was dispatched successfully,
 	 * 		false otherwise.
 	 */
-	protected static function passRequest($controller, $function, $args=false, 
+	protected static function passRequest($controller, $function, $args=false,
 			$namespace=false, $suffix=false, $argProtection=false) {
 		// Generate the fully qualified class name
 		if ($namespace !== false) {
@@ -1133,11 +1133,11 @@ class Dispatcher {
 		}
 		$controller = ucfirst($controller) . $suffix;
 		$class = $namespace . $controller;
-		
+
 		// Include the file if this class isn't loaded
 		if (!@class_exists($class) && isset(static::$controllerPaths[$class]))
 			\hydrogen\loadPath(static::$controllerPaths[$class]);
-			
+
 		// Call it if everything's there
 		if (@class_exists($class)) {
 			// Call it, Cap'n.
@@ -1166,7 +1166,7 @@ class Dispatcher {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Generates the exact URL that was used to request this page from the web
 	 * browser, minus any hash mark (#) that may be in it and anything after
@@ -1183,7 +1183,7 @@ class Dispatcher {
 		$url .= "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 		return $url;
 	}
-	
+
 	/**
 	 * Generates an array of arguments from a token array and an index array.
 	 * Any index that does not exist in the token array will be added to the
@@ -1207,7 +1207,7 @@ class Dispatcher {
 		}
 		return $args;
 	}
-	
+
 	/**
 	 * Generates an array of arguments from an associative array and an array
 	 * of keys to pull from the source array.  Any key in the keyArray that
@@ -1234,7 +1234,7 @@ class Dispatcher {
 		}
 		return $args;
 	}
-	
+
 	/**
 	 * The handler used by the argument protection system in
 	 * {@link #passRequest}.  Even though this argument is public for PHP
@@ -1257,12 +1257,12 @@ class Dispatcher {
 			$caller = debug_backtrace();
 			$caller = $caller[1];
 			trigger_error($errstr . ' in <strong>' . $caller['function'] .
-				'</strong> called from <strong>' . $caller['file'] . 
+				'</strong> called from <strong>' . $caller['file'] .
 				'</strong> on line <strong>' . $caller['line'] .
 				"</strong>\n<br />error handler", E_USER_WARNING);
 		}
 	}
-	
+
 	/**
 	 * This class should not be instantiated.
 	 */

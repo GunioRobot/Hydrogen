@@ -14,15 +14,15 @@ use hydrogen\cache\CacheEngine;
  * for {@link #add}, which returns <code>true</code> in order for semaphore usage to not hang.
  */
 class NoEngine implements CacheEngine {
-	
+
 	public function get($key) {
 		return false;
 	}
-	
+
 	public function add($key, $value, $ttl) {
 		return true;
 	}
-	
+
 	public function replace($key, $value, $ttl) {
 		return false;
 	}
@@ -38,15 +38,15 @@ class NoEngine implements CacheEngine {
 	public function decrement($key, $value=1) {
 		return false;
 	}
-	
+
 	public function delete($key) {
 		return false;
 	}
-	
+
 	public function deleteAll() {
 		return false;
 	}
-	
+
 	public function getStats() {
 		return false;
 	}

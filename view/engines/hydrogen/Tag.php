@@ -30,7 +30,7 @@ namespace hydrogen\view\engines\hydrogen;
  * necessary to instantiate the appropriate Node instance.
  */
 abstract class Tag {
-	
+
 	/**
 	 * Gets an instance of a class implementing
 	 * {@link \hydrogen\view\engines\hydrogen\Node}, or false if the Tag

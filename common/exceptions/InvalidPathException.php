@@ -7,7 +7,7 @@
 namespace hydrogen\common\exceptions;
 
 class InvalidPathException extends \Exception {
-	
+
 }
 
 ?>

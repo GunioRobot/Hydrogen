@@ -18,7 +18,7 @@ class VariableNode implements Node {
 	protected $filters;
 	protected $origin;
 	protected $escape;
-	
+
 	public static function createFromString($varString, $escape=null,
 			$origin='VariableNode') {
 		$token = Lexer::getVariableToken($origin, $varString);
@@ -49,7 +49,7 @@ class VariableNode implements Node {
 			$phpFile->addPageContent('} catch (\hydrogen\view\exceptions\NoSuchVariableException $e) { echo "{?", $e->variable, "?}"; }');
 		$phpFile->addPageContent(PHPFile::PHP_CLOSETAG);
 	}
-	
+
 	public function getVariablePHP($phpFile, $forSetting=false,
 			$nullIfNotFound=false) {
 		$var = '$context';

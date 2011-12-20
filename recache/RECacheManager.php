@@ -17,23 +17,23 @@ class RECacheManager {
 	const RECACHE_FAIL = 0;
 	const RECACHE_SUCCESS = 1;
 	const RECACHE_UPDATE = 2;
-	
+
 	protected static $manager = NULL;
 	protected $engine, $semengine, $trackHits, $recacheWaiting, $pageCacheData;
-	
+
 	protected function __construct($trackHits=true) {
 		$this->engine = CacheEngineFactory::getEngine();
 		$this->semengine = SemaphoreEngineFactory::getEngine();
 		$this->recacheWaiting = array();
 		$this->trackHits = $trackHits;
 	}
-	
+
 	public static function getInstance($trackHits=true) {
 		if (is_null(static::$manager))
 			static::$manager = new RECacheManager($trackHits);
 		return static::$manager;
 	}
-	
+
 	public function get($key, $allow_expired=false) {
 		$ukey = $this->uniqueKey('ITEM', $key);
 		$wrap = $this->engine->get($ukey);
@@ -57,7 +57,7 @@ class RECacheManager {
 		$this->get_hit();
 		return $wrap->data;
 	}
-	
+
 	public function set($key, $value, $ttl=1800, $groups=false) {
 		$wrap = new AssetWrapper($value, $ttl, $groups);
 		$ukey = $this->uniqueKey('ITEM', $key);
@@ -71,7 +71,7 @@ class RECacheManager {
 		}
 		return false;
 	}
-	
+
 	public function checkIfFrequent($num, $seconds, $key) {
 		$tqkey = $this->uniqueKey('TQ', "${key}_${num}_${seconds}");
 		$this->semengine->acquire($tqkey);
@@ -83,7 +83,7 @@ class RECacheManager {
 		$this->semengine->release($tqkey);
 		return $isFrequent;
 	}
-	
+
 	public function setIfFrequent($num, $seconds, $key, $value, $ttl=7200, $group=false) {
 		$set = false;
 		if ($this->checkIfFrequent($num, $seconds, $key))
@@ -94,7 +94,7 @@ class RECacheManager {
 		}
 		return $set;
 	}
-	
+
 	public function increment($key, $value=1) {
 		$success = $this->engine->increment($this->uniqueKey('ITEM', $key), $value);
 		if ($success === false) {
@@ -104,7 +104,7 @@ class RECacheManager {
 		}
 		return $success;
 	}
-	
+
 	public function decrement($key, $value=1) {
 		$success = $this->engine->decrement($this->uniqueKey('ITEM', $key), $value);
 		if ($success === false) {
@@ -114,21 +114,21 @@ class RECacheManager {
 		}
 		return $success;
 	}
-	
+
 	public function clear($key) {
 		return $this->engine->delete($this->uniqueKey('ITEM', $key));
 	}
-	
+
 	public function clearGroup($group) {
 		$key = $this->uniqueKey('GROUP', $group);
 		$time = round(microtime(true), 4);
 		return $this->engine->set($key, $time, 0);
 	}
-	
+
 	public function clearAll() {
 		return $this->engine->deleteAll();
 	}
-	
+
 	public function getStats($addToStats=false) {
 		$stats = $this->engine->getStats();
 		if (!$stats)
@@ -154,7 +154,7 @@ class RECacheManager {
 		}
 		return $stats;
 	}
-	
+
 	public function pageCache($ttl=1800, $key=false, $groups=false, $num=false, $seconds=false) {
 		if (!$key) {
 			$key = "http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
@@ -174,26 +174,26 @@ class RECacheManager {
 			);
 		ob_start(array($this, 'endPageCache'));
 	}
-	
+
 	public function endPageCache($pageContent) {
 		if (!is_array($this->pageCacheData))
 			return '';
 		if ($this->pageCacheData['num'] && $this->pageCacheData['seconds'])
-			$this->setIfFrequent($this->pageCacheData['num'], $this->pageCacheData['seconds'], $this->pageCacheData['key'], 
+			$this->setIfFrequent($this->pageCacheData['num'], $this->pageCacheData['seconds'], $this->pageCacheData['key'],
 				$pageContent, $this->pageCacheData['ttl'], $this->pageCacheData['groups']);
 		else
 			$this->set($this->pageCacheData['key'], $pageContent, $this->pageCacheData['ttl'], $this->pageCacheData['groups']);
 		$this->pageCacheData = false;
 		return $pageContent;
 	}
-	
+
 	public function recache_pageCache($ttl=1800, $key=false, $groups=false, $failFunction=false) {
 		if (!$key) {
 			$key = "http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
 			if (count($_POST) > 0)
 				$key .= serialize($_POST);
 		}
-			
+
 		$wrap = $this->recache_get_wrapper($key);
 		switch ($wrap->response) {
 			case self::RECACHE_SUCCESS:
@@ -215,8 +215,8 @@ class RECacheManager {
 					die();
 		}
 	}
-	
-	public function recache_get($key, $ttl, $groups, $updateFunction, 
+
+	public function recache_get($key, $ttl, $groups, $updateFunction,
 			$updateFuncArgs=array(), $failFunction=false, $failFuncArgs=array()) {
 		$wrap = $this->recache_get_wrapper($key);
 		switch ($wrap->response) {
@@ -234,11 +234,11 @@ class RECacheManager {
 		}
 		return NULL;
 	}
-	
+
 	public function recache_get_wrapper($key) {
 		// First we make the wrapper
 		$wrap = new RECacheWrapper();
-		
+
 		// Get the request. If the cache has it, return it with SUCCESS.
 		$val = $this->get($key);
 		if ($val !== false) {
@@ -246,7 +246,7 @@ class RECacheManager {
 			$wrap->data = $val;
 			return $wrap;
 		}
-		
+
 		// The cache doesn't have it.  If it's not currently being updated, send the UPDATE response.
 		$semkey = $this->uniqueKey('RECACHE', $key);
 		if ($this->semengine->acquire($semkey, 0)) {
@@ -254,7 +254,7 @@ class RECacheManager {
 			$wrap->response = self::RECACHE_UPDATE;
 			return $wrap;
 		}
-		
+
 		// It's currently being updated.  If we have old data available, use that for now.
 		$val = $this->get($key, true);
 		if ($val !== false) {
@@ -262,7 +262,7 @@ class RECacheManager {
 			$wrap->data = $val;
 			return $wrap;
 		}
-		
+
 		// We don't have old data.  Wait for the key to be updated, and return the new data.
 		if ($this->semengine->acquire($semkey)) {
 			$this->semengine->release($semkey);
@@ -273,13 +273,13 @@ class RECacheManager {
 				return $wrap;
 			}
 		}
-		
+
 		// The server still hasn't handled the update, meaning we're probably at risk of an overload.
 		// Recommend an immediate die() so we don't crash out.
 		$wrap->response = self::RECACHE_FAIL;
 		return $wrap;
 	}
-	
+
 	public function recache_cancel($key) {
 		if (($idx = array_search($key, $this->recacheWaiting)) !== false) {
 			$this->semengine->release($this->uniqueKey('RECACHE', $key));
@@ -288,11 +288,11 @@ class RECacheManager {
 		}
 		return false;
 	}
-	
+
 	protected function uniqueKey($type, $key) {
 		return Config::getRequiredVal('recache', 'unique_name') . ':' . $type . ':' . $key;
 	}
-	
+
 	protected function get_miss() {
 		if ($this->trackHits) {
 			$key = $this->uniqueKey('STATS', 'get_misses');
@@ -300,7 +300,7 @@ class RECacheManager {
 				$this->engine->set($key, 1, 0);
 		}
 	}
-	
+
 	protected function get_hit() {
 		if ($this->trackHits) {
 			$key = $this->uniqueKey('STATS', 'get_hits');
@@ -308,7 +308,7 @@ class RECacheManager {
 				$this->engine->set($key, 1, 0);
 		}
 	}
-	
+
 	protected function set_hit() {
 		if ($this->trackHits) {
 			$key = $this->uniqueKey('STATS', 'set_hits');

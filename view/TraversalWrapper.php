@@ -14,17 +14,17 @@ use hydrogen\view\exceptions\NoSuchVariableException;
  * arrays keys, and getter functions of any wrapped object to be accessed as
  * though it's a member variable.  A variable that could normally be called
  * like this in PHP:
- * 
+ *
  * <pre>
  * $users['ted']->getGroup()->name
  * </pre>
- * 
+ *
  * ...can be called like this if $users has been wrapped in a TraversalWrapper:
- * 
+ *
  * <pre>
  * $users->ted->group->name
  * </pre>
- * 
+ *
  * The biggest benefit of this, other than the shorter syntax, is that the
  * template programmer does not have to be aware which properties are
  * functions, arrays, objects, member variables, etc.  Properties can be
@@ -255,7 +255,7 @@ class TraversalWrapper {
 	public function __toString() {
 		return $this->var;
 	}
-	
+
 	/**
 	 * Handles errors from the __get magic method, when the method attempts to
 	 * blindly access a member of the wrapped variable.  This handler simply

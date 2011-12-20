@@ -41,13 +41,13 @@ use hydrogen\log\Log;
  */
 abstract class Controller extends MagicCacheable {
 	protected static $instances = array();
-	
+
 	/**
 	 * Controller is a singleton.  To get an instance of any
 	 * Controller-extending class, see {@link #getInstance}.
 	 */
 	protected function __construct() { }
-	
+
 	/**
 	 * Creates an instance of this Controller if one has not yet been created,
 	 * or returns the already-created instance if it has.
@@ -60,7 +60,7 @@ abstract class Controller extends MagicCacheable {
 			static::$instances[$class] = new $class();
 		return static::$instances[$class];
 	}
-	
+
 	/**
 	 * Calls the RECache algorithm to facilitate the magic-caching of a
 	 * controller function's output.
@@ -86,7 +86,7 @@ abstract class Controller extends MagicCacheable {
 			echo $data[1];
 			return $data[0];
 		}
-		
+
 		// In very rare cases, cached data might be wrong.
 		Log::warn("Cached data for controller " . get_class($this) .
 			" was not properly formatted.  Calling " .
@@ -94,7 +94,7 @@ abstract class Controller extends MagicCacheable {
 			" directly to recover.");
 		return call_user_func_array($callback, $args);
 	}
-	
+
 	/**
 	 * Executes the specified function with the given arguments, intercepting
 	 * all of the stdout output that occurs throughout the duration of its
@@ -102,7 +102,7 @@ abstract class Controller extends MagicCacheable {
 	 *
 	 * @param callback callback The function to call, in standard PHP callback
 	 * 		format.
-	 * @param args array An array of arguments with which to call the specified 
+	 * @param args array An array of arguments with which to call the specified
 	 * 		function.
 	 * @return array An array, in which the first element is the function's
 	 * 		return value, and the second element is the stdout output that was

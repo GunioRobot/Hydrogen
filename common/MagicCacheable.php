@@ -85,7 +85,7 @@ use hydrogen\common\exceptions\NoSuchMethodException;
  * class in the webapp.
  */
 abstract class MagicCacheable {
-	
+
 	/**
 	 * This PHP magic method is responsible for every facet of the magic
 	 * caching algorithm but the interface with
@@ -134,7 +134,7 @@ abstract class MagicCacheable {
 		throw new NoSuchMethodException(
 			"Method $func does not exist in class $class.");
 	}
-	
+
 	/**
 	 * Calls the RECache algorithm to facilitate the magic-caching of a
 	 * certain callback function.  By default, it caches the 'return' value of
@@ -159,7 +159,7 @@ abstract class MagicCacheable {
 		$cm = RECacheManager::getInstance();
 		return $cm->recache_get($key, $ttl, $groups, $callback, $args);
 	}
-	
+
 }
 
 ?>

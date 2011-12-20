@@ -18,7 +18,7 @@ use hydrogen\cache\CacheEngine;
  */
 class MemcacheEngine implements CacheEngine {
 	protected $memcache;
-	
+
 	public function __construct() {
 		$res = new Memcache();
 		$host = Config::getVal('cache', 'memcache_host') ?: 'localhost';
@@ -26,19 +26,19 @@ class MemcacheEngine implements CacheEngine {
 		$res->addServer($host, $port);
 		$this->memcache = $res;
 	}
-	
+
 	public function __destruct() {
 		$this->memcache->close();
 	}
-	
+
 	public function add($key, $value, $ttl) {
 		return $this->memcache->add($key, $value, false, $ttl);
 	}
-	
+
 	public function replace($key, $value, $ttl) {
 		return $this->memcache->replace($key, $value, false, $ttl);
 	}
-	
+
 	public function get($key) {
 		return $this->memcache->get($key);
 	}
@@ -54,15 +54,15 @@ class MemcacheEngine implements CacheEngine {
 	public function decrement($key, $value=1) {
 		return $this->memcache->decrement($key, $value);
 	}
-	
+
 	public function delete($key) {
 		return $this->memcache->delete($key, 0);
 	}
-	
+
 	public function deleteAll() {
 		return $this->memcache->flush();
 	}
-	
+
 	public function getStats() {
 		return $this->memcache->getStats();
 	}

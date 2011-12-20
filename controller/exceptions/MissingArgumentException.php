@@ -7,7 +7,7 @@
 namespace hydrogen\controller\exceptions;
 
 class MissingArgumentException extends \Exception {
-	
+
 }
 
 ?>

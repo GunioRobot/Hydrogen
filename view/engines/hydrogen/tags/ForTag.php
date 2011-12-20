@@ -79,7 +79,7 @@ class ForTag extends Tag {
 		}
 		else
 			$emptyNodes = false;
-		
+
 		// Got it all, make a node.
 		return new ForNode($keyVar, $valVar, $arrayVar, $forNodes,
 			$emptyNodes);

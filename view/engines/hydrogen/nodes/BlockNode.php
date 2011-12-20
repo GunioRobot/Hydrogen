@@ -15,7 +15,7 @@ class BlockNode implements Node {
 	public function __construct($nodes) {
 		$this->nodes = $nodes;
 	}
-	
+
 	public function __clone() {
 		return new BlockNode($this->nodes);
 	}

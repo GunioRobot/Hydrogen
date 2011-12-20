@@ -64,7 +64,7 @@ class Query {
 		);
 	protected $joinStack, $whereStack, $havingStack, $tableAliases, $reqJoinCond;
 	protected $query, $verb, $autoTablePrefix, $dbengine;
-	
+
 	public function __construct($verb, $dbengine=false, $autoTablePrefix=true) {
 		$this->verb = strtoupper($verb);
 		if (!in_array($this->verb, static::$legalVerbs))
@@ -81,19 +81,19 @@ class Query {
 			$dbengine : DatabaseEngineFactory::getEngine($dbengine);
 		$this->prefix = $this->dbengine->getTablePrefix();
 	}
-	
+
 	public function getQueryTree() {
 		return $this->query;
 	}
-	
+
 	public function distinct() {
 		$this->assertLegal();
 		$this->setModifier('DISTINCT');
 	}
-	
+
 	public function field($field, $alias=false, $vars=false) {
 		$this->assertLegal();
-		if (is_string($field) && ($field = trim($field)) !== '' && 
+		if (is_string($field) && ($field = trim($field)) !== '' &&
 				($alias === false || (is_string($alias) && ($alias = trim($alias)) !== ''))) {
 			$fieldData = array(
 				'field' => $field,
@@ -112,10 +112,10 @@ class Query {
 		else
 			throw new InvalidSQLException('Invalid field name or alias.');
 	}
-	
+
 	public function from($table, $alias=false) {
 		$this->assertLegal();
-		if (is_string($table) && ($table = trim($table)) !== '' && 
+		if (is_string($table) && ($table = trim($table)) !== '' &&
 				($alias === false || (is_string($alias) && ($alias = trim($alias)) !== ''))) {
 			if ($this->autoTablePrefix && $this->prefix)
 				$table = $this->prefix . $table;
@@ -135,7 +135,7 @@ class Query {
 		else
 			throw new InvalidSQLException('Invalid table name or alias.');
 	}
-	
+
 	public function groupby($field) {
 		$this->assertLegal();
 		if (!$field || ($field = trim($field)) === '')
@@ -143,14 +143,14 @@ class Query {
 		if ($this->query['GROUPBY'] != $field)
 			$this->query['GROUPBY'] = $field;
 	}
-	
+
 	public function having($expression, $vars=false, $logic=false) {
 		$this->assertLegal();
 		if (!isset($this->query['HAVING']))
 			$this->query['HAVING'] = array();
 		$this->addExpression($this->query['HAVING'], $this->havingStack, $expression, $vars, $logic);
 	}
-	
+
 	public function havingCloseGroup() {
 		$this->assertLegal('having');
 		if (!isset($this->query['HAVING']))
@@ -164,12 +164,12 @@ class Query {
 			$this->query['HAVING'] = array();
 		$this->openGroup($this->query['HAVING'], $this->havingStack, $logic);
 	}
-	
+
 	public function ignore() {
 		$this->assertLegal();
 		$this->setModifier('IGNORE');
 	}
-	
+
 	public function intoField($field) {
 		$this->assertLegal();
 		if (!is_string($field) || ($field = trim($field)) === '')
@@ -180,7 +180,7 @@ class Query {
 			$this->query['INTO']['fields'] = array();
 		$this->query['INTO']['fields'][] = $field;
 	}
-	
+
 	public function intoTable($table) {
 		$this->assertLegal();
 		if (!is_string($table) || ($table = trim($table)) === '')
@@ -191,13 +191,13 @@ class Query {
 			$this->query['INTO'] = array();
 		$this->query['INTO']['table'] = $table;
 	}
-	
+
 	public function join($table, $alias=false, $type=false) {
 		$this->assertLegal();
 		if ($this->reqJoinCond)
 			throw new InvalidSQLException('Cannot create new JOIN: A condition is required ' .
 				'for the currently active JOIN.');
-		if (is_string($table) && ($table = trim($table)) !== '' && 
+		if (is_string($table) && ($table = trim($table)) !== '' &&
 				($alias === false || (is_string($alias) && ($alias = trim($alias)) !== ''))) {
 			if ($alias && isset($this->tableAliases[$alias]))
 				throw new DuplicateAliasException("Alias '$alias' already in use.");
@@ -217,7 +217,7 @@ class Query {
 		else
 			throw new InvalidSQLException('Invalid table name or alias.');
 	}
-	
+
 	public function limit($rowcount, $offset=false) {
 		$this->assertLegal();
 		$this->query['LIMIT'] = array(
@@ -225,7 +225,7 @@ class Query {
 			'offset' => $offset
 			);
 	}
-	
+
 	public function on($expression, $vars=false, $logic=false) {
 		$this->assertLegal('join');
 		if (!isset($this->query['JOIN']))
@@ -240,7 +240,7 @@ class Query {
 		$this->addExpression($curJoin['args'], $this->joinStack, $expression, $vars, $logic);
 		$this->reqJoinCond = false;
 	}
-	
+
 	public function onCloseGroup() {
 		$this->assertLegal('join');
 		if (!isset($this->query['JOIN']))
@@ -250,7 +250,7 @@ class Query {
 			throw new InvalidSQLException('Cannot use ON after a different JOIN condition.');
 		$this->closeGroup($curJoin['args'], $this->joinStack);
 	}
-	
+
 	public function onOpenGroup($logic=false) {
 		$this->assertLegal('join');
 		if (!isset($this->query['JOIN']))
@@ -263,7 +263,7 @@ class Query {
 		$this->openGroup($curJoin['args'], $this->joinStack, $logic);
 		$this->reqJoinCond = true;
 	}
-	
+
 	public function orderby($field, $direction='ASC') {
 		$this->assertLegal();
 		if (!$field || ($field = trim($field)) === '')
@@ -278,7 +278,7 @@ class Query {
 			'direction' => $direction
 			);
 	}
-	
+
 	public function prepare() {
 		$eclass = get_class($this->dbengine);
 		$fclass = $eclass::QUERY_FORMATTER;
@@ -286,14 +286,14 @@ class Query {
 		$stmt = $this->dbengine->prepare($formatter->getPreparedQuery());
 		return new QueryStatement($stmt, $formatter);
 	}
-	
+
 	public function select($queryObj) {
 		$this->assertLegal();
 		if (isset($this->query['VALUES']))
 			throw new InvalidSQLException('SELECT cannot be used in conjunction with VALUES.');
 		$this->query['SELECT'] = $queryObj->getQueryTree();
 	}
-	
+
 	public function set($expression, $vars=false) {
 		$this->assertLegal();
 		if (!$expression || ($expression = trim($expression)) === '')
@@ -309,10 +309,10 @@ class Query {
 			'vars' => $vars
 			);
 	}
-	
+
 	public function table($table, $alias=false) {
 		$this->assertLegal();
-		if (is_string($table) && ($table = trim($table)) !== '' && 
+		if (is_string($table) && ($table = trim($table)) !== '' &&
 				($alias === false || (is_string($alias) && ($alias = trim($alias)) !== ''))) {
 			if ($this->autoTablePrefix && $this->prefix)
 				$table = $this->prefix . $table;
@@ -332,7 +332,7 @@ class Query {
 		else
 			throw new InvalidSQLException('Invalid table name or alias.');
 	}
-	
+
 	public function using($fields) {
 		$this->assertLegal('join');
 		if (!isset($this->query['JOIN']))
@@ -351,7 +351,7 @@ class Query {
 				$curJoin['args'][] = $field;
 		}
 	}
-	
+
 	public function values($expression, $vars=false) {
 		$this->assertLegal();
 		if (isset($this->query['SELECT']))
@@ -368,28 +368,28 @@ class Query {
 			);
 		$this->query['VALUES'][] = $valblock;
 	}
-	
+
 	public function where($expression, $vars=false, $logic=false) {
 		$this->assertLegal();
 		if (!isset($this->query['WHERE']))
 			$this->query['WHERE'] = array();
 		$this->addExpression($this->query['WHERE'], $this->whereStack, $expression, $vars, $logic);
 	}
-	
+
 	public function whereCloseGroup() {
 		$this->assertLegal('where');
 		if (!isset($this->query['WHERE']))
 			throw new InvalidSQLException('Group close failed: No groups have been opened.');
 		$this->closeGroup($this->query['WHERE'], $this->whereStack);
 	}
-	
+
 	public function whereOpenGroup($logic=false) {
 		$this->assertLegal('where');
 		if (!isset($this->query['WHERE']))
 			$this->query['WHERE'] = array();
 		$this->openGroup($this->query['WHERE'], $this->whereStack, $logic);
 	}
-	
+
 	protected function openGroup(&$tree, &$stack, $logic, $defaultLogic='AND') {
 		$branch = &$tree;
 		foreach($stack as $node)
@@ -405,7 +405,7 @@ class Query {
 			);
 		$stack[] = $count;
 	}
-	
+
 	protected function closeGroup(&$tree, &$stack) {
 		$branch = &$tree;
 		if (count($stack) == 0)
@@ -416,7 +416,7 @@ class Query {
 			throw new InvalidSQLException('Groups cannot be closed when empty.');
 		unset($stack[count($stack) - 1]);
 	}
-	
+
 	protected function addExpression(&$tree, &$stack, $expression, $vars=false, $logic=false, $defaultLogic='AND') {
 		$branch = &$tree;
 		foreach($stack as $node)
@@ -438,14 +438,14 @@ class Query {
 				)
 			);
 	}
-	
+
 	protected function setModifier($modifier) {
 		if (!isset($this->query[$this->verb]['modifiers']))
 			$this->query[$this->verb]['modifiers'] = array();
 		if (!in_array($modifier, $this->query[$this->verb]['modifiers']))
 			$this->query[$this->verb]['modifiers'][] = $modifier;
 	}
-	
+
 	protected function assertLegal($method=false) {
 		if (!$method) {
 			$back = debug_backtrace();

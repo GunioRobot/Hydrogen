@@ -20,11 +20,11 @@ use hydrogen\view\exceptions\ViewCacheException;
  * simple call to {@link load()}.
  */
 class View {
-	
+
 	const DEFAULT_ENGINE = "hydrogen";
-	
+
 	protected static $defaultContext = false;
-	
+
 	/**
 	 * Gets a variable's value from the default View context.
 	 *
@@ -38,7 +38,7 @@ class View {
 			static::$defaultContext = new ContextStack();
 		return static::$defaultContext->get($key);
 	}
-	
+
 	/**
 	 * Sets a variable or array of variables to the specified value(s)
 	 * in the default View context.  Any variables declared with this function
@@ -58,7 +58,7 @@ class View {
 		else
 			static::$defaultContext->set($keyOrArray, $value);
 	}
-	
+
 	/**
 	 * Loads and displays the specified view inside of a new ViewSandbox
 	 * with the default context (unless otherwise specified).
@@ -78,7 +78,7 @@ class View {
 		$sandbox = new ViewSandbox($viewContext);
 		static::loadIntoSandbox($viewName, $sandbox);
 	}
-	
+
 	/**
 	 * Loads and displays the specified view inside of an existing
 	 * ViewSandbox, respecting the [view]->use_cache setting in the autoconfig
@@ -95,7 +95,7 @@ class View {
 		else
 			$sandbox->loadRawPHP(static::getViewPHP($viewName));
 	}
-	
+
 	/**
 	 * Loads the cached version of a specified view into the given sandbox.
 	 * If the specified view is not found in the cache folder, the view is
@@ -152,7 +152,7 @@ class View {
 			}
 		}
 	}
-	
+
 	/**
 	 * Retrieves the raw PHP code for any specified view, loading it through
 	 * the view loader and template engine specified in the Hydrogen
@@ -171,12 +171,12 @@ class View {
 		$loader = LoaderFactory::getLoader();
 		return $engineClass::getPHP($viewName, $loader);
 	}
-	
+
 	/**
 	 * This class should not be instantiated.
 	 */
 	protected function __construct() {}
-	
+
 }
 
 ?>

@@ -18,12 +18,12 @@ class CacheEngineFactory {
 	 * @var array
 	 */
 	protected static $engine;
-	
+
 	/**
 	 * This class should not be instantiated.
 	 */
 	private function __construct() {}
-	
+
 	/**
 	 * Gets an instance of the specified cache engine.  If an instance has already been
 	 * created for the specified engine, it will be returned.  Otherwise, a new instance

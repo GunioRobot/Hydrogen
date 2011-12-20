@@ -63,7 +63,7 @@ class ContextStack {
 		if (is_array($initialData))
 			$this->setArray($initialData);
 	}
-	
+
 	/**
 	 * Gets a specified key's value, wrapped in an instance of
 	 * {@link TraversalWrapper}.  This is a PHP magic method and should
@@ -78,7 +78,7 @@ class ContextStack {
 	public function __get($key) {
 		return $this->getWrapped($key);
 	}
-	
+
 	/**
 	 * Sets the specified key to the specified value.  This is a PHP magic
 	 * method and should not be called directly.  This function is an alias for
@@ -92,7 +92,7 @@ class ContextStack {
 	public function __set($key, $value) {
 		$this->set($key, $value);
 	}
-	
+
 	/**
 	 * Checks to see if the specified key has been created in this context.
 	 * This is a PHP magic method and should not be called directly.  This
@@ -104,7 +104,7 @@ class ContextStack {
 	public function __isset($key) {
 		return $this->keyExists($Key);
 	}
-	
+
 	/**
 	 * Deletes a key from this context.  This is a PHP magic method and should
 	 * not be called directly.  This function is an alias for {@link delete()}.

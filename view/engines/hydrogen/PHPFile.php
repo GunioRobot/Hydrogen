@@ -22,7 +22,7 @@ class PHPFile {
 	 * A string representing an open-tag for PHP code.
 	 */
 	const PHP_OPENTAG = "<?php ";
-	
+
 	/**
 	 * A string representing a close-tag for PHP code.
 	 */

@@ -19,7 +19,7 @@ class ErrorHandler {
 	const HTTP_NO_CONTENT						= "204 No Content";
 	const HTTP_RESET_CONTENT					= "205 Reset Content";
 	const HTTP_PARTIAL_CONTENT					= "206 Partial Content";
-	
+
 	// 3xx Redirection
 	const HTTP_MULTIPLE_CHOICES					= "300 Multiple Choices";
 	const HTTP_MOVED_PERMANENTLY				= "301 Moved Permanently";
@@ -28,7 +28,7 @@ class ErrorHandler {
 	const HTTP_NOT_MODIFIED						= "304 Not Modified";
 	const HTTP_USE_PROXY						= "305 Use Proxy";
 	const HTTP_TEMPORARY_REDIRECT				= "307 Temporary Redirect";
-	
+
 	// 4xx Client Error
 	const HTTP_BAD_REQUEST						= "400 Bad Request";
 	const HTTP_UNAUTHORIZED						= "401 Unauthorized";
@@ -48,7 +48,7 @@ class ErrorHandler {
 	const HTTP_UNSUPPORTED_MEDIA_TYPE			= "415 Unsupported Media Type";
 	const HTTP_REQUESTED_RANGE_NOT_SATIFSIABLE	= "416 Requested Range Not Satisfiable";
 	const HTTP_EXPECTATION_FAILED				= "417 Expectation Failed";
-	
+
 	// 5xx Server Error
 	const HTTP_INTERNAL_SERVER_ERROR			= "500 Internal Server Error";
 	const HTTP_NOT_IMPLEMENTED					= "501 Not Implemented";
@@ -56,21 +56,21 @@ class ErrorHandler {
 	const HTTP_SERVICE_UNAVAILABLE				= "503 Service Unavailable";
 	const HTTP_GATEWAY_TIMEOUT					= "504 Gateway Timeout";
 	const HTTP_HTTP_VERSION_NOT_SUPPORTED		= "505 HTTP Version Not Supported";
-	
-	
+
+
 	protected static $handlerStack = array();
 	protected static $handling = false;
 	protected static $errorLevel = NULL;
-	
+
 	private function __construct() {}
-	
+
 	public static function attach($statusCode=false) {
 		if (!$statusCode)
 			$statusCode = self::HTTP_INTERNAL_SERVER_ERROR;
 		static::$handlerStack[] = new ActionDescriptor(ActionDescriptor::ERRORTYPE_DEFAULT, $statusCode);
 		static::init();
 	}
-	
+
 	public static function attachErrorPage($errPage=false, $statusCode=false) {
 		if (!$statusCode)
 			$statusCode = self::HTTP_INTERNAL_SERVER_ERROR;
@@ -79,21 +79,21 @@ class ErrorHandler {
 		static::$handlerStack[] = new ActionDescriptor(ActionDescriptor::ERRORTYPE_FILE, $statusCode, $errPage);
 		static::init();
 	}
-	
+
 	public static function attachErrorString($errStr, $statusCode=false) {
 		if (!$statusCode)
 			$statusCode = self::HTTP_INTERNAL_SERVER_ERROR;
 		static::$handlerStack[] = new ActionDescriptor(ActionDescriptor::ERRORTYPE_STRING, $statusCode, $errStr);
 		static::init();
 	}
-	
+
 	public static function attachRedirect($url, $statusCode=false) {
 		if (!$statusCode)
 			$statusCode = self::HTTP_TEMPORARY_REDIRECT;
 		static::$handlerStack[] = new ActionDescriptor(ActionDescriptor::ERRORTYPE_REDIRECT, $statusCode, $url);
 		static::init();
 	}
-	
+
 	public static function detach() {
 		if (static::$handling) {
 			if (count(static::$handlerStack) > 1)
@@ -104,7 +104,7 @@ class ErrorHandler {
 		}
 		return false;
 	}
-	
+
 	public static function detachAll() {
 		if (static::$handling) {
 			static::$handlerStack = array();
@@ -114,7 +114,7 @@ class ErrorHandler {
 			static::$handling = false;
 		}
 	}
-	
+
 	public static function setHandledErrors($errorLevel) {
 		static::$errorLevel = $errorLevel;
 		if (static::$handling) {
@@ -122,7 +122,7 @@ class ErrorHandler {
 			set_error_handler("\hydrogen\errorhandler\ErrorHandler::handleError", static::$errorLevel);
 		}
 	}
-	
+
 	protected static function init() {
 		if (!static::$handling) {
 			if (static::$errorLevel === false)
@@ -133,7 +133,7 @@ class ErrorHandler {
 			static::$handling = true;
 		}
 	}
-	
+
 	public static function handleError($errno, $errstr, $errfile, $errline) {
 		if (Config::getVal("errorhandler", "log_errors") == "1")
 			Log::error($errstr, $errfile, $errline);
@@ -155,19 +155,19 @@ class ErrorHandler {
 				die(header("Location: " . $ad->errorData));
 		}
 	}
-	
+
 	public static function handleException($e) {
 		static::handleError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 	}
-	
+
 	public static function printBuffer($page) {
 		return $page;
 	}
-	
+
 	public static function sendHttpCodeHeader($codeString, $httpVer='1.1') {
 		header("HTTP/$httpVer " . $codeString);
 	}
-	
+
 	protected static function constructErrorPage($errorCode) {
 		$page  = "<html>\n";
 		$page .= "\t<head>\n";

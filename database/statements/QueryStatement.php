@@ -5,13 +5,13 @@ use \hydrogen\database\DatabaseStatement;
 
 class QueryStatement extends DatabaseStatement {
 	protected $stmt, $formatter, $vars;
-	
+
 	public function __construct($stmt, $formatter) {
 		$this->stmt = $stmt;
 		$this->formatter = $formatter;
 		$this->vars = array();
 	}
-	
+
 	public function bindColumn($column, &$param) {
 		return $this->stmt->bindColumn($column, $param);
 	}
@@ -64,7 +64,7 @@ class QueryStatement extends DatabaseStatement {
 	public function fetchObject() {
 		return $this->stmt->fetchObject();
 	}
-	
+
 	public function getQuery() {
 		return $this->formatter->getCompleteQuery();
 	}

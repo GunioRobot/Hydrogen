@@ -22,7 +22,7 @@ use hydrogen\view\engines\hydrogen\exceptions\NoSuchTagException;
  * 		Frontend Development Documentation
  */
 class HydrogenEngine implements TemplateEngine {
-	
+
 	protected static $filterClass = array();
 	protected static $filterPath = array();
 	protected static $filterNamespace = array(
@@ -57,7 +57,7 @@ class HydrogenEngine implements TemplateEngine {
 		if ($path)
 			static::$filterPath[$filterName] = Config::getAbsolutePath($path);
 	}
-	
+
 	/**
 	 * Adds an external tag to the Hydrogen template engine.  Once added,
 	 * the tag can be used in any Hydrogen template file for the duration
@@ -81,7 +81,7 @@ class HydrogenEngine implements TemplateEngine {
 		if ($path)
 			static::$tagPath[$tagName] = Config::getAbsolutePath($path);
 	}
-	
+
 	/**
 	 * Adds a namespace from which filters will be automatically loaded if
 	 * they're not found in the default hydrogen namespace or any namespaces
@@ -108,7 +108,7 @@ class HydrogenEngine implements TemplateEngine {
 	public static function addFilterNamespace($namespace) {
 		static::$filterNamespace[] = static::formatNamespace($namespace);
 	}
-	
+
 	/**
 	 * Adds a namespace from which tags will be automatically loaded if
 	 * they're not found in the default hydrogen namespace or any namespaces
@@ -135,7 +135,7 @@ class HydrogenEngine implements TemplateEngine {
 	public static function addTagNamespace($namespace) {
 		static::$tagNamespace[] = static::formatNamespace($namespace);
 	}
-	
+
 	/**
 	 * Gets the full class name (with namespace) for the given filter.  The
 	 * class will either be pre-loaded by this function, or is expected to be
@@ -157,7 +157,7 @@ class HydrogenEngine implements TemplateEngine {
 			static::$filterClass, static::$filterPath,
 			static::$filterNamespace, $origin);
 	}
-	
+
 	/**
 	 * Gets the full class name (with namespace) for the given tag.  The
 	 * class will either be pre-loaded by this function, or is expected to be
@@ -179,7 +179,7 @@ class HydrogenEngine implements TemplateEngine {
 			static::$tagClass, static::$tagPath,
 			static::$tagNamespace, $origin);
 	}
-	
+
 	/**
 	 * Generates the raw PHP for the given template, using the given loader to
 	 * load the template files.  Works as specified by
@@ -196,7 +196,7 @@ class HydrogenEngine implements TemplateEngine {
 		$nodes = $parser->parse();
 		return $nodes->render();
 	}
-	
+
 	/**
 	 * Adds a leading backslash to the provided namespace if it's missing one,
 	 * and optionally adds as trailing backslash as well.
@@ -214,7 +214,7 @@ class HydrogenEngine implements TemplateEngine {
 			$namespace .= '\\';
 		return $namespace;
 	}
-	
+
 	/**
 	 * Gets the full class name for a certain module (tag or filter) using the
 	 * provided arrays of data.  This is an abstraction for

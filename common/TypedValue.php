@@ -41,7 +41,7 @@ class TypedValue {
 	public function __toString() {
 		return $this->value;
 	}
-	
+
 	/**
 	 * Allows a TypedValue to be used with the 'clone' keyword.
 	 */

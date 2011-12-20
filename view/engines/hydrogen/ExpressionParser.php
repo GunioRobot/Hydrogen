@@ -488,7 +488,7 @@ class ExpressionParser {
 					$tokens[$i]->value, $phpFile, $origin);
 			}
 		}
-		
+
 		return implode(' ', $tokens);
 	}
 

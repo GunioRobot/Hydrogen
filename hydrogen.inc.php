@@ -46,7 +46,7 @@ function fileNotFoundHandler($errno, $errstr, $errfile, $errline) {
 		$caller = debug_backtrace();
 		$caller = $caller[1];
 		trigger_error($errstr . ' in <strong>' . $caller['function'] .
-			'</strong> called from <strong>' . $caller['file'] . 
+			'</strong> called from <strong>' . $caller['file'] .
 			'</strong> on line <strong>' . $caller['line'] .
 			"</strong>\n<br />error handler", E_USER_WARNING);
 	}

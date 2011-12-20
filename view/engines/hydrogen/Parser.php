@@ -262,7 +262,7 @@ class Parser {
 	public function getObject($key) {
 		return isset($this->objs[$key]) ? $this->objs[$key] : false;
 	}
-	
+
 	/**
 	 * Retrieves the value at the top of a specified stack stored in the
 	 * Parser, without popping it from the stack.
@@ -276,7 +276,7 @@ class Parser {
 			return $this->stacks[$stack][count($this->stacks[$stack]) - 1];
 		return null;
 	}
-	
+
 	/**
 	 * Pushes a certain value onto a Parser-stored stack.  If the specified
 	 * stack does not exist, it will be created.
@@ -291,7 +291,7 @@ class Parser {
 		else
 			$this->stacks[$stack][] = $value;
 	}
-	
+
 	/**
 	 * Pops the top value off of a specified stack.
 	 *

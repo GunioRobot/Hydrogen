@@ -36,7 +36,7 @@ namespace hydrogen\view\engines\hydrogen;
  * if an incorrect number of arguments have been passed to it.
  */
 interface Filter {
-	
+
 	/**
 	 * Applies PHP code to the given string that is necessary for executing
 	 * a filter on PHP data.  The filter should not be directly applied to

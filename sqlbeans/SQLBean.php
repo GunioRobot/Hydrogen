@@ -19,7 +19,7 @@ abstract class SQLBean {
 	protected static $fields, $tableNoPrefix, $primaryKey, $primaryKeyIsAutoIncrement;
 	protected static $tableAlias, $beanMap;
 	protected $stored, $mapped, $changed, $sqlkeys, $dbengine, $dbreconstruct;
-	
+
 	public function __construct($dbengine=false, &$dbrow=false, $fieldPrefix=false, $bindRow=true) {
 		$class = get_class($this);
 		$this->stored = array();
@@ -47,11 +47,11 @@ abstract class SQLBean {
 			$dbengine : DatabaseEngineFactory::getEngine($dbengine);
 		$this->dbreconstruct = $this->dbengine->getReconstructArray();
 	}
-	
+
 	public function __sleep() {
 		return array('stored', 'mapped', 'changed', 'sqlkeys', 'dbreconstruct');
 	}
-	
+
 	public function __wakeup() {
 		$this->dbengine = DatabaseEngineFactory::getCustomEngine(
 			$this->dbreconstruct['engine'],
@@ -64,27 +64,27 @@ abstract class SQLBean {
 			$this->dbreconstruct['table_prefix']
 			);
 	}
-	
+
 	public function __get($var) {
 		return $this->get($var);
 	}
-	
+
 	public function __isset($var) {
 		return isset($this->stored[$var]) ||
 			method_exists($this, 'get_' . $var);
 	}
-	
+
 	public function __set($var, $val) {
 		return $this->set($var, $val);
 	}
-	
+
 	public function get($var) {
 		$method = 'get_' . $var;
 		if (method_exists($this, $method))
 			return $this->$method();
 		return isset($this->stored[$var]) ? $this->stored[$var] : false;
 	}
-	
+
 	public function set($var, $val, $isSQLFunction=false) {
 		$success = true;
 		if ($isSQLFunction)
@@ -102,32 +102,32 @@ abstract class SQLBean {
 			$this->changed[$var] = true;
 		return $success;
 	}
-	
+
 	public function fieldChanged($field) {
 		return isset($this->stored[$field]) && isset($this->changed[$field]) && $this->changed[$field];
 	}
-	
+
 	public function hasMappedBeans() {
 		return count($this->mapped) > 0;
 	}
-	
+
 	public function getMapped($name) {
 		return isset($this->mapped[$name]) ? $this->mapped[$name] : false;
 	}
-	
+
 	public function setMapped($name, $bean) {
 		$this->mapped[$name] = $bean;
 	}
-	
+
 	public static function getFields() {
 		return static::$fields;
 	}
-	
+
 	public static function getPrimaryKey() {
 		return static::$primaryKey;
 	}
-	
-	protected static function getMappedBean($dbengine, $mapPath, $mapOverride, &$resultRow, $registry=false, $beanClass=false, 
+
+	protected static function getMappedBean($dbengine, $mapPath, $mapOverride, &$resultRow, $registry=false, $beanClass=false,
 			$parentAlias=false, $tableAliasOverride=false, $usedBeans=false) {
 		$bean = $beanClass ?: get_called_class();
 		$alias = ($parentAlias ? $parentAlias . '_' : '') . ($tableAliasOverride ?: $bean::$tableAlias);
@@ -153,7 +153,7 @@ abstract class SQLBean {
 						else
 							$sendPath = $mapPath;
 						$override = isset($mapping['tableAliasOverride']) ? $mapping['tableAliasOverride'] : false;
-						$mapped = static::getMappedBean($dbengine, $sendPath, false, $resultRow, $registry, $mapping['joinBean'], 
+						$mapped = static::getMappedBean($dbengine, $sendPath, false, $resultRow, $registry, $mapping['joinBean'],
 							$alias, $override, $usedBeans);
 						$beanInst->setMapped($mapname, $mapped);
 					}
@@ -164,9 +164,9 @@ abstract class SQLBean {
 			$registry->setBean($beanInst, $primkey);
 		return $beanInst;
 	}
-	
+
 	protected static function buildMappedSelect($query, $mapPath=false, $mapOverride=false, $beanClass=false,
-			$joinCondType=false, $joinCond=false, $joinType=false, $parentAlias=false, $tableAliasOverride=false, 
+			$joinCondType=false, $joinCond=false, $joinType=false, $parentAlias=false, $tableAliasOverride=false,
 			$usedBeans=false) {
 		$bean = $beanClass ?: get_called_class();
 		if (!isset($bean::$tableAlias))
@@ -210,14 +210,14 @@ abstract class SQLBean {
 							$joinCondType = 'on';
 							$joinCond = $mapping['on'];
 						}
-						static::buildMappedSelect($query, $sendPath, false, $mapping['joinBean'], $joinCondType, $joinCond, 
+						static::buildMappedSelect($query, $sendPath, false, $mapping['joinBean'], $joinCondType, $joinCond,
 							$joinType, $alias, $override, $usedBeans);
 					}
 				}
 			}
 		}
 	}
-	
+
 	public static function select($query=false, $doMapping=false, $mapOverride=false, $dbengine=false) {
 		$dbengine = ($dbengine instanceof DatabaseEngine) ?
 			$dbengine : DatabaseEngineFactory::getEngine($dbengine);
@@ -251,7 +251,7 @@ abstract class SQLBean {
 		}
 		return $results;
 	}
-	
+
 	public function insert($ignore=false) {
 		$query = new Query('INSERT', $this->dbengine);
 		if ($ignore)
@@ -266,7 +266,7 @@ abstract class SQLBean {
 			if ($valid) {
 				$query->intoField($key);
 				if ($this->sqlkeys[$key])
-					$template .= $val . ', '; 
+					$template .= $val . ', ';
 				else {
 					$template .= '?, ';
 					$vals[] = $val;
@@ -286,7 +286,7 @@ abstract class SQLBean {
 		}
 		return true;
 	}
-	
+
 	public function update($allFields=false, $remap=false) {
 		if (!isset($this->stored[static::$primaryKey])) {
 			$class = get_class($this);
@@ -339,7 +339,7 @@ abstract class SQLBean {
 		}
 		return true;
 	}
-	
+
 	public function delete() {
 		if (!isset($this->stored[static::$primaryKey])) {
 			$class = get_class($this);

@@ -19,7 +19,7 @@ namespace hydrogen\view\engines\hydrogen;
  * @see \hydrogen\view\engines\hydrogen\Tag
  */
 interface Node {
-	
+
 	/**
 	 * Instructs the node to submit its output and any other applicable PHP
 	 * code to an instance of {@link \hydrogen\view\engines\hydrogen\PHPFile}.

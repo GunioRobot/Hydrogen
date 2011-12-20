@@ -21,7 +21,7 @@ namespace hydrogen\view;
  * of the loader from {@link \hydrogen\view\LoaderFactory::getLoader()}.
  */
 interface Loader {
-	
+
 	/**
 	 * Loads the contents of the specified template.
 	 *
